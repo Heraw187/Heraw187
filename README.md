@@ -1,16 +1,13 @@
-## Hi there 👋
+# Welcome
 
-<!--
-**Heraw187/Heraw187** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+This repository contains experiments and prototypes.
 
-Here are some ideas to get you started:
+To run the AR server used by both examples:
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+```bash
+pip install -r ARStudioPrototype/requirements.txt
+python3 ARStudioPrototype/ARServerExample.py
+```
+
+- `ARStudioPrototype/` — Python server and Roblox plugin example.
+- `AFramePrototype/` — basic A-Frame page that consumes the same AR data for mobile testing.

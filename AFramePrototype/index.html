@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>A-Frame Mobile AR Studio Example</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene embedded>
+      <a-box id="ar-box" position="0 1.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+      <a-sky color="#ECECEC"></a-sky>
+    </a-scene>
+    <script>
+      const box = document.getElementById('ar-box');
+      const url = 'http://localhost:5000/tracking';
+
+      async function fetchTracking() {
+        try {
+          const res = await fetch(url);
+          const data = await res.json();
+          const p = data.position;
+          const r = data.rotation;
+          box.setAttribute('position', `${p.x} ${p.y} ${p.z}`);
+          box.setAttribute('rotation', `${r.x} ${r.y} ${r.z}`);
+        } catch (e) {
+          console.warn('Failed to fetch tracking data:', e);
+        }
+      }
+
+      setInterval(fetchTracking, 100);
+    </script>
+  </body>
+</html>
