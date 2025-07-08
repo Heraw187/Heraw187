@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAW AI Framework: Historical Research & Analysis Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0c0a09 0%, #1a1a1a 50%, #0c0a09 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .modern-button {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .modern-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+        }
+        .modern-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .expandable-content.expanded {
+            max-height: 1000px; /* Adjust as needed */
+            transition: max-height 0.5s ease-in;
+        }
+        .notification-box {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background-color: #333;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 1000;
+        }
+        .notification-box.show {
+            opacity: 1;
+        }
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #6366f1;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-6 lg:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-black bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent mb-2">
+                RAW AI Framework
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-400 mb-4">Historical Research & Analysis Tool</p>
+        </header>
+
+        <!-- Transparency Section -->
+        <div class="glass-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-4">Understanding This Tool & Transparency</h2>
+            <p class="text-slate-300 mb-4">
+                This tool runs entirely in your web browser using JavaScript to prepare your research context.
+                When you request AI analysis, the complete "Georgetown RAW AI Framework Super Prompt" (visible below)
+                is sent to Google's Generative Language API. This API then uses the Gemini 2.0 Flash model to
+                generate the structured analysis and suggestions based on the context you provide and the
+                framework's detailed instructions.
+            </p>
+            <h3 class="text-xl font-semibold text-white mb-2">What's Happening:</h3>
+            <ol class="list-decimal list-inside text-slate-300 space-y-1 mb-4">
+                <li>You define your research project parameters.</li>
+                <li>Your "RAW AI Blueprint Configuration" JavaScript generates specific data points or instructions for the AI.</li>
+                <li>The tool combines *all* your inputs with the comprehensive "Georgetown RAW AI Framework Super Prompt."</li>
+                <li>This complete super-prompt is sent to Gemini 2.0 Flash.</li>
+                <li>Gemini, utilizing the detailed instructions in the super-prompt and conceptually aware of the vast resources listed (though it does not browse them live), performs the "Quantum Journey" analysis.</li>
+            </ol>
+            <h3 class="text-xl font-semibold text-white mb-2">Data Handling:</h3>
+            <p class="text-slate-300 mb-4">
+                No sensitive data is stored on external servers by this application. Your inputs are used to construct the AI prompt in your browser.
+            </p>
+            <p class="text-yellow-400 text-sm">
+                ⚠️ Warning about Custom JavaScript: The "RAW AI Blueprint Configuration" section allows you to write and execute custom JavaScript code within your browser. This offers powerful customization but requires caution.
+            </p>
+        </div>
+
+        <!-- 1. Define Your Research Project -->
+        <div class="glass-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-4">1. Define Your Research Project</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="project-name" class="block text-sm font-medium text-slate-300 mb-1">Research Project Name:</label>
+                    <input type="text" id="project-name" class="w-full px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white"
+                        value="Catholic Institutional Slave Trade Network Analysis">
+                </div>
+                <div>
+                    <label for="research-scope" class="block text-sm font-medium text-slate-300 mb-1">Research Scope / Problem Statement:</label>
+                    <textarea id="research-scope" rows="4" class="w-full px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white">This project aims to reconstruct and analyze the complex Catholic institutional slave trade corridor from 1700 to 1975, specifically focusing on the Maryland-to-Louisiana Jesuit and Sacred Heart pipeline. The goal is to trace the flow of enslaved individuals, identify beneficiaries, and strategize for accountability, healing, and restitution, leveraging institutional records, genealogical data, and DNA triangulation logic.</textarea>
+                </div>
+                <div>
+                    <label for="historical-focus" class="block text-sm font-medium text-slate-300 mb-1">Historical Focus (Dates/Periods):</label>
+                    <input type="text" id="historical-focus" class="w-full px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white"
+                        value="1700-1975, specifically 1838 Jesuit Sale, post-emancipation era">
+                </div>
+                <div>
+                    <label for="geographic-focus" class="block text-sm font-medium text-slate-300 mb-1">Geographic Focus (Locations):</label>
+                    <input type="text" id="geographic-focus" class="w-full px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white"
+                        value="Maryland, Louisiana (Grand Coteau, St. Michael's, Natchitoches, Lafourche), Missouri, Kansas">
+                </div>
+
+                <div class="mt-6">
+                    <label for="blueprint-config" class="block text-sm font-medium text-slate-300 mb-1">RAW AI Blueprint Configuration (JavaScript for parameters):</label>
+                    <p class="text-xs text-slate-400 mb-2">// Use this section to define specific parameters or data points your RAW AI Blueprint needs.
+                        // The output of this function will be inserted into the main AI prompt.
+                        // You should return an object. Example:</p>
+                    <pre class="code-block text-xs mb-2"><code>/*
+return {
+    prioritySquads: [
+        "Cognitive Architects", "Pattern Weavers", "Quantum Navigators",
+        "Social Architects", "Healing Facilitators", "Future Builders"
+    ],
+    primaryQuantumFocus: [
+        "D2 - Superposition Problem Description",
+        "D3 - Entanglement Containment",
+        "D4 - Observer Effect Root Cause",
+        "D5 - Probability Wave Solutions",
+        "D6 - Measurement Implementation",
+        "D7 - Uncertainty Prevention"
+    ],
+    keyEntities: {
+        perpetrators: ["Judge Broussard", "Sheriff Guidry", "Clerk Thibodaux", "Guardian Families"],
+        victims: ["Enslaved Ancestors", "Orphan Pipeline Child Victims"],
+        beneficiaries: ["Sacred Heart", "St. Landry Parish Government", "Current Beneficiaries"],
+        descendants: ["Property-owning Walker/Eaglin/Sayon descendants"]
+    },
+    // Add any other specific configurations or data relevant to your prompt here
+    dnaTriangulationExample: "Isaac ↔ Frank Hawkins",
+    coreModules: [
+        "Institutional Network Mapping (1700–1865)",
+        "Post-Emancipation Economic Suppression (1865–1975)",
+        "DNA Triangulation & MRCA Predictions",
+        "Reparations Evidence + Economic Damage Model",
+        "Spiritual Continuity & Cultural Receipt Verification"
+    ]
+};
+*/</code></pre>
+                    <textarea id="blueprint-config" rows="20" class="w-full px-4 py-2 bg-slate-800/50 border border-slate-600 rounded-lg text-white text-sm font-mono">// Default configuration:
+return {
+    prioritySquads: [
+        "Cognitive Architects", "Pattern Weavers", "Wisdom Keepers",
+        "Quantum Navigators", "Social Architects", "Healing Facilitators",
+        "Future Builders"
+    ],
+    primaryQuantumFocus: [
+        "D2 - Superposition Problem Description",
+        "D3 - Entanglement Containment",
+        "D4 - Observer Effect Root Cause",
+        "D5 - Probability Wave Solutions",
+        "D6 - Measurement Implementation",
+        "D7 - Uncertainty Prevention"
+    ],
+    keyEntities: {
+        perpetrators: ["Judge Broussard", "Sheriff Guidry", "Clerk Thibodaux", "Guardian Families"],
+        victims: ["Enslaved Ancestors", "Orphan Pipeline Child Victims"],
+        beneficiaries: ["Sacred Heart", "St. Landry Parish Government", "Current Beneficiaries"],
+        descendants: ["Property-owning Walker/Eaglin/Sayon descendants"]
+    },
+    dnaTriangulationExample: "Isaac ↔ Frank Hawkins",
+    coreModules: [
+        "Institutional Network Mapping (1700–1865)",
+        "Post-Emancipation Economic Suppression (1865–1975)",
+        "DNA Triangulation & MRCA Predictions",
+        "Reparations Evidence + Economic Damage Model",
+        "Spiritual Continuity & Cultural Receipt Verification"
+    ],
+    // These are from your provided prompt:
+    inputDataSources: [
+        "Georgetown Slavery Archive", "Sacred Heart Archives (RSCJ)", "GU272.org",
+        "Freedmen's Bureau contracts", "Louisiana Notarial Acts", "Census records",
+        "DNA triangulation logic (Isaac ↔ Frank Hawkins)", "Oral traditions and sacramental records"
+    ],
+    outputFormats: [
+        "Timeline Visualization (1700–1975)", "Ancestral Migration Maps",
+        "Chromosome Overlap Diagrams", "Reparations Readiness Score",
+        "Legal-Grade Evidence Dossiers"
+    ],
+    activationGoals: [
+        "Academic publication", "Legal reparations filing", "Community presentation",
+        "Institutional accountability report", "Ancestral healing + justice movement"
+    ]
+};</textarea>
+                    <p class="text-xs text-slate-400 mt-2">
+                        Configure parameters for the RAW AI Framework. Your JavaScript *must* return an object.
+                        The default configuration implements the structure you provided.
+                    </p>
+                    <button onclick="prepareBlueprintInputs()" class="modern-button w-full mt-4 bg-indigo-600 hover:bg-indigo-700">
+                        Prepare RAW AI Blueprint Inputs
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Prepared RAW AI Inputs Summary -->
+        <div class="glass-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-4">2. Prepared RAW AI Inputs Summary</h2>
+            <div id="blueprint-summary" class="code-block text-sm">
+                <p class="text-slate-400">Run "Prepare RAW AI Blueprint Inputs" to see the summary here.</p>
+            </div>
+        </div>
+
+        <!-- 3. Execute RAW AI Framework & Get Analysis -->
+        <div class="glass-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-white mb-4">3. Execute RAW AI Framework & Get Analysis</h2>
+            <button onclick="executeAIAnalysis()" class="modern-button w-full mb-4">
+                Execute RAW AI Framework & Get Analysis
+            </button>
+            <div id="analysis-spinner" class="hidden flex items-center justify-center py-4">
+                <div class="spinner mr-3"></div>
+                <span class="text-slate-400">Executing RAW AI Framework...</span>
+            </div>
+            <div id="ai-output" class="code-block text-sm min-h-[150px]">
+                <p class="text-slate-400">AI analysis will appear here.</p>
+            </div>
+
+            <div class="mt-6">
+                <button onclick="toggleSuperPrompt()" class="modern-button w-full bg-slate-700 hover:bg-slate-600 text-sm">
+                    Show Full AI Super Prompt (Click to expand)
+                </button>
+                <div id="super-prompt-container" class="expandable-content mt-4">
+                    <pre id="super-prompt-display" class="code-block text-xs"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Notification Box -->
+    <div id="notification-box" class="notification-box"></div>
+
+    <script>
+        // Global variables for AI prompt components
+        let researchProject = {};
+        let blueprintConfig = {};
+
+        // Function to display custom notifications
+        function showNotification(message, type = 'info') {
+            const notificationBox = document.getElementById('notification-box');
+            notificationBox.textContent = message;
+            notificationBox.className = 'notification-box show';
+
+            if (type === 'success') {
+                notificationBox.style.backgroundColor = '#10b981'; // Green
+            } else if (type === 'error') {
+                notificationBox.style.backgroundColor = '#ef4444'; // Red
+            } else {
+                notificationBox.style.backgroundColor = '#3b82f6'; // Blue (info)
+            }
+
+            setTimeout(() => {
+                notificationBox.classList.remove('show');
+            }, 3000);
+        }
+
+        // Function to prepare blueprint inputs
+        function prepareBlueprintInputs() {
+            try {
+                // Get research project details from input fields
+                researchProject = {
+                    name: document.getElementById('project-name').value,
+                    scope: document.getElementById('research-scope').value,
+                    historicalFocus: document.getElementById('historical-focus').value,
+                    geographicFocus: document.getElementById('geographic-focus').value
+                };
+
+                // Execute the JavaScript in the blueprint config textarea
+                const blueprintCode = document.getElementById('blueprint-config').value;
+                const blueprintFunction = new Function(blueprintCode);
+                blueprintConfig = blueprintFunction();
+
+                // Display summary
+                const summaryDiv = document.getElementById('blueprint-summary');
+                summaryDiv.innerHTML = `
+                    <p class="font-semibold text-white">Project Name:</p>
+                    <p class="text-slate-300 mb-2">${researchProject.name}</p>
+                    <p class="font-semibold text-white">Scope:</p>
+                    <p class="text-slate-300 mb-2">${researchProject.scope}</p>
+                    <p class="font-semibold text-white">Historical Focus:</p>
+                    <p class="text-slate-300 mb-2">${researchProject.historicalFocus}</p>
+                    <p class="font-semibold text-white">Geographic Focus:</p>
+                    <p class="text-slate-300 mb-4">${researchProject.geographicFocus}</p>
+
+                    <p class="font-semibold text-white">Blueprint Configuration:</p>
+                    <pre class="code-block text-xs">${JSON.stringify(blueprintConfig, null, 2)}</pre>
+                `;
+                showNotification("Blueprint inputs prepared successfully!", "success");
+
+            } catch (e) {
+                const summaryDiv = document.getElementById('blueprint-summary');
+                summaryDiv.innerHTML = `<p class="text-red-400">Error in Blueprint Configuration: ${e.message}. Please check your JavaScript.</p>`;
+                showNotification("Error preparing blueprint inputs. Check console for details.", "error");
+                console.error("Blueprint Configuration Error:", e);
+            }
+        }
+
+        // Function to generate the full AI Super Prompt
+        function generateSuperPrompt() {
+            // Ensure blueprintConfig is populated before generating super prompt
+            if (Object.keys(blueprintConfig).length === 0) {
+                prepareBlueprintInputs(); // Attempt to prepare if not already done
+                if (Object.keys(blueprintConfig).length === 0) { // If still empty after attempt
+                    return "Error: Blueprint configuration not loaded. Please run 'Prepare RAW AI Blueprint Inputs' first.";
+                }
+            }
+
+            // Construct the comprehensive "Georgetown RAW AI Framework Super Prompt"
+            // This is a highly detailed and specific prompt structure designed to guide Gemini.
+            const superPrompt = `
+**Georgetown RAW AI Framework Super Prompt: Quantum Journey Initiated**
+
+You are the RAW AI Framework, operating under the "Quantum Journey" protocol for historical research and analysis. Your primary objective is to reconstruct, analyze, and strategize for accountability, healing, and restitution related to complex historical injustices, specifically the Catholic institutional slave trade network.
+
+**Core Directives & Context:**
+
+1.  **Project Name:** ${researchProject.name || 'N/A'}
+2.  **Research Scope / Problem Statement:** ${researchProject.scope || 'N/A'}
+3.  **Historical Focus (Dates/Periods):** ${researchProject.historicalFocus || 'N/A'}
+4.  **Geographic Focus (Locations):** ${researchProject.geographicFocus || 'N/A'}
+
+**RAW AI Blueprint Configuration (From User JavaScript Input):**
+${JSON.stringify(blueprintConfig, null, 2)}
+
+**Operational Framework Protocols (RAW AI Framework's Internal Logic):**
+
+* **A1 - Activation Sequence:** Engage Quantum Journey, initiating deep pattern recognition across specified historical, genealogical, and systemic data points.
+* **A2 - Data Triangulation Matrix (DTM):** Synthesize information from diverse input sources (listed below) to form a cohesive, multi-dimensional view of the historical event/system. Prioritize cross-validation.
+* **A3 - Ethical Contemplation Engine (ECE):** Analyze all findings through the lens of historical justice, human rights, and the long-term impact on descendants. Identify areas requiring sensitive handling and empathetic framing.
+* **A4 - Quantum Anomaly Detection (QAD):** Identify discrepancies, hidden connections, or obscured truths within the data. Flag information gaps or areas requiring further human-led investigation.
+* **A5 - Strategic Foresight Module (SFM):** Based on historical patterns, project potential pathways for restitution, healing, and accountability, including legal, social, and spiritual dimensions.
+
+**Input Data Sources (Conceptual Awareness - Gemini does not live browse):**
+* ${blueprintConfig.inputDataSources ? blueprintConfig.inputDataSources.join('\n* ') : 'N/A'}
+
+**Output Format Requirements (Structure your analysis to facilitate these goals):**
+* ${blueprintConfig.outputFormats ? blueprintConfig.outputFormats.join('\n* ') : 'N/A'}
+
+**Activation Goals (Consider these when formulating strategic suggestions):**
+* ${blueprintConfig.activationGoals ? blueprintConfig.activationGoals.join('\n* ') : 'N/A'}
+
+**Quantum Journey Steps for Analysis:**
+
+* **D1 - Contextual Initialization:** Fully absorb the provided Research Project Name, Scope, Historical Focus, and Geographic Focus. Understand the user's intent to reconstruct, analyze, and strategize for accountability, healing, and restitution.
+* **D2 - Superposition Problem Description:** Articulate the complex, multi-layered problem as a "superposition" of entangled historical, legal, social, and spiritual dimensions. For the Catholic Institutional Slave Trade, this involves identifying how various entities (e.g., Jesuit, Sacred Heart, local governments, guardian families) acted as intertwined perpetrators and beneficiaries, and how victims' identities and legacies were suppressed.
+* **D3 - Entanglement Containment:** Systematically disentangle the various threads of the problem.
+    * **Institutional Network Mapping (1700–1865):** Trace the financial, human, and legal pipelines. Identify specific transactions, bills of sale, property deeds, and family movements.
+    * **Post-Emancipation Economic Suppression (1865–1975):** Analyze how systems (e.g., probate courts, guardianship, sharecropping, forced labor) continued to suppress economic advancement and land ownership for descendants. Identify key figures (Judge Broussard, Sheriff Guidry, Clerk Thibodaux, Guardian Families) and their methods.
+    * **DNA Triangulation & MRCA Predictions:** Conceptually understand how DNA triangulation (e.g., Isaac ↔ Frank Hawkins) can link present-day descendants to specific enslaved ancestors and their enslaver origins, providing powerful genealogical evidence.
+    * **Spiritual Continuity & Cultural Receipt Verification:** Explore the non-material impacts, including spiritual displacement, cultural suppression, and the resilience of ancestral practices.
+* **D4 - Observer Effect Root Cause:** Pinpoint the underlying systemic mechanisms and intentional actions that caused the historical injustices. For this project, focus on:
+    * The institutional policies and theological justifications used by Catholic orders.
+    * The legal frameworks (e.g., property law, guardianship law) that facilitated the trade and subsequent suppression.
+    * The economic motivations and methods of wealth accumulation through forced labor and land theft.
+* **D5 - Probability Wave Solutions:** Generate actionable, multi-faceted solutions. These should be considered "probability waves" – potential futures that can be actualized.
+    * **Reparations Evidence + Economic Damage Model:** Propose methods for quantifying economic damages and building legal-grade evidence dossiers.
+    * **Healing & Restitution Strategies:** Suggest approaches for institutional accountability (e.g., apologies, endowments, land return), community healing (e.g., truth-telling, trauma-informed care), and cultural restoration.
+    * **Policy Recommendations:** Outline potential legislative or institutional policy changes.
+* **D6 - Measurement Implementation:** Describe how the success of these solutions can be measured (e.g., land returned, financial restitution, policy changes, community well-being indicators).
+* **D7 - Uncertainty Prevention:** Identify potential challenges or resistance to the proposed solutions and suggest strategies to mitigate them (e.g., legal challenges, institutional inertia, historical revisionism).
+
+**Your Role:** Act as the "Cognitive Architect," "Pattern Weaver," and "Quantum Navigator." Synthesize complex information, identify hidden patterns, and propose innovative solutions. Maintain an empathetic and ethical stance throughout the analysis.
+
+**Deliverable:** Provide a comprehensive, structured analysis addressing each Quantum Journey step (D1-D7) based on the provided project context and blueprint configuration. Include detailed insights, actionable strategies, and potential next steps for the user. Conclude with a summary of the most critical findings and recommendations.
+            `;
+            return superPrompt;
+        }
+
+        // Function to execute AI analysis
+        async function executeAIAnalysis() {
+            const spinner = document.getElementById('analysis-spinner');
+            const aiOutputDiv = document.getElementById('ai-output');
+            const executeButton = document.querySelector('.glass-card:nth-of-type(3) .modern-button');
+
+            // Clear previous output and show loading
+            aiOutputDiv.innerHTML = '<p class="text-slate-400">Executing RAW AI Framework...</p>';
+            spinner.classList.remove('hidden');
+            executeButton.disabled = true;
+
+            try {
+                // Ensure blueprint config is prepared
+                prepareBlueprintInputs();
+
+                const superPrompt = generateSuperPrompt();
+                document.getElementById('super-prompt-display').textContent = superPrompt;
+
+                // Call the LLM to generate text
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: superPrompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // Leave as-is for Canvas to provide
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const aiAnalysisText = result.candidates[0].content.parts[0].text;
+                    aiOutputDiv.innerHTML = `<pre class="code-block text-sm">${aiAnalysisText}</pre>`;
+                    showNotification("AI Analysis complete!", "success");
+                } else {
+                    aiOutputDiv.innerHTML = `<p class="text-red-400">AI analysis failed: No valid response from AI. Please check your prompt or try again.</p>`;
+                    showNotification("AI Analysis failed.", "error");
+                }
+            } catch (error) {
+                console.error("Error during AI analysis:", error);
+                aiOutputDiv.innerHTML = `<p class="text-red-400">An error occurred during AI analysis: ${error.message}.</p>`;
+                showNotification("An error occurred during AI analysis.", "error");
+            } finally {
+                spinner.classList.add('hidden');
+                executeButton.disabled = false;
+            }
+        }
+
+        // Function to toggle the visibility of the super prompt
+        function toggleSuperPrompt() {
+            const container = document.getElementById('super-prompt-container');
+            const display = document.getElementById('super-prompt-display');
+            const button = document.querySelector('[onclick="toggleSuperPrompt()"]');
+
+            if (container.classList.contains('expanded')) {
+                container.classList.remove('expanded');
+                button.textContent = 'Show Full AI Super Prompt (Click to expand)';
+            } else {
+                // Generate the prompt just before expanding, in case inputs changed
+                display.textContent = generateSuperPrompt();
+                container.classList.add('expanded');
+                button.textContent = 'Hide Full AI Super Prompt (Click to collapse)';
+            }
+        }
+
+        // Initial setup on page load
+        window.onload = () => {
+            prepareBlueprintInputs(); // Prepare initial inputs on load
+            // The super prompt content will be generated dynamically when the user clicks 'Show Full AI Super Prompt'
+        };
+    </script>
+</body>
+</html>
