@@ -15,6 +15,7 @@ This guide outlines a conceptual approach for assembling a simple AR authoring e
 3. Download the exported files to your computer.
 
 ## 3. Host and Test
+You can use the sample page in `WebARExample/` as a template for hosting or quick testing.
 
 1. Deploy the exported package to a web server (GitHub Pages or similar).
 2. Open the link on a mobile device with camera access.
