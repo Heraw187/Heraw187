@@ -4,8 +4,8 @@ This prototype demonstrates the basic approach for integrating augmented reality
 
 ## Components
 
-1. **External AR Server**: Runs on the developer's machine or mobile device. It captures camera data and AR tracking information and exposes it over a local network API.
-2. **Roblox Plugin (Lua)**: Connects to the external server, receives AR data, and updates Roblox objects accordingly.
+1. **External AR Server** (`ARServerExample.py`): Runs on the developer's machine or a mobile device. It accepts tracking data over HTTP (``POST /tracking``) and serves the latest reading to clients (``GET /tracking``).
+2. **Roblox Plugin (Lua)**: Connects to the server, receives AR data, and updates Roblox objects accordingly.
 
 The example below shows a simplified Lua plugin that requests transformation data from the AR server.
 
@@ -44,8 +44,20 @@ end)
 
 ## Usage Steps
 
-1. Create or reuse an ARKit/ARCore app that streams tracking data as JSON over HTTP. The server should include fields for `position` and `rotation`.
-2. Install this plugin in Roblox Studio and update `ARServerUrl` to match your local server's address.
-3. Run the server and then start play testing in Roblox Studio. The script will update `ARObject` to follow the AR device's pose.
+1. Start the server:
+
+   ```bash
+   python ARServerExample.py
+   ```
+
+   It will listen on port 5000. A sample script (`send_test_data.py`) is provided to push dummy data:
+
+   ```bash
+   python send_test_data.py
+   ```
+
+   Real AR apps can ``POST`` JSON to ``/tracking`` with ``position`` and ``rotation`` fields.
+2. Install the plugin in Roblox Studio and update `ARServerUrl` if the server runs on a different machine or port.
+3. Run Roblox Studio. The script will update `ARObject` to follow the pose data served by the Python app.
 
 This is a minimal starting point. A real implementation would need networking security, latency handling, and more comprehensive data parsing.
